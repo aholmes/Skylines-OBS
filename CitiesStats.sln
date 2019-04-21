@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2050
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiveTwitchMod", "LiveTwitchMod\LiveTwitchMod.csproj", "{7CE9873C-78F3-4B00-BA93-8BDE78F1AEE8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CitiesStats", "source\CitiesStats\CitiesStats.csproj", "{7CE9873C-78F3-4B00-BA93-8BDE78F1AEE8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
