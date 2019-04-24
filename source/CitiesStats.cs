@@ -3,6 +3,8 @@ using ICities;
 using System.IO;
 using UnityEngine;
 using System.Globalization;
+using SkyTools.Configuration;
+using System;
 
 namespace CitiesStats
 {
@@ -32,18 +34,6 @@ namespace CitiesStats
 
 		public void OnSettingsUI(UIHelperBase helper)
 		{
-			var cultures = CultureInfo.GetCultures(CultureTypes.SpecificCultures)
-				.Intersect(CultureInfo.GetCultures(CultureTypes.InstalledWin32Cultures));
-			var currentCulture = new[] { CultureInfo.CurrentCulture };
-			var cultureDisplayNames = currentCulture.Concat(cultures.Except(currentCulture))
-				.Select(o => o.Name + " - " + o.NativeName + " / " + o.EnglishName)
-				.ToArray();
-
-			//var userSettings = helper.AddGroup("User Settings");
-			//userSettings.AddDropdown("Culture / Language", cultureDisplayNames, 0, index => Debug.Log(index));
-
-			var modSettings = helper.AddGroup("Mod Settings");
-			modSettings.AddTextfield("File Directory", @"C:\", changedText => Debug.Log(changedText), textSubmitted => Debug.Log(textSubmitted));
 		}
 	}
 }
