@@ -1,4 +1,5 @@
 ﻿using System;
+using SkyTools.Configuration;
 
 namespace CitiesStats.Config
 {
@@ -7,14 +8,23 @@ namespace CitiesStats.Config
 	{
 		private readonly SkyTools.Configuration.ConfigurationProvider<T> _configProvider;
 
-		public ConfigurationProvider(SkyTools.Configuration.ConfigurationProvider<T> configProvider)
+		private ConfigurationProvider(SkyTools.Configuration.ConfigurationProvider<T> configProvider)
 		{
 			_configProvider = configProvider;
 		}
 
-        public ConfigurationProvider(string storageId, string modName, Func<T> configurationFactory)
+        private ConfigurationProvider(string storageId, string modName, Func<T> configurationFactory)
 		{
 			_configProvider = new SkyTools.Configuration.ConfigurationProvider<T>(storageId, modName, configurationFactory);
+		}
+
+		public static ConfigurationProvider<T> Instance { get; private set; }
+		public static ConfigurationProvider<T> Create(string storageId, string modName, Func<T> configurationFactory)
+		{
+			if (Instance != null) return Instance;
+
+			Instance = new ConfigurationProvider<T>(storageId, modName, configurationFactory);
+			return Instance;
 		}
 
         public event EventHandler Changed
@@ -49,21 +59,6 @@ namespace CitiesStats.Config
 		public override string ToString()
 		{
 			return _configProvider.ToString();
-		}
-	}
-
-	public class ConfigurationProviderProxy<T>
-	{
-		private T _obj;
-
-		public ConfigurationProviderProxy(T obj)
-		{
-			_obj = obj;
-		}
-
-		public static ConfigurationProviderProxy<T> Proxy(T obj)
-		{
-			return new ConfigurationProviderProxy<T>(obj);
 		}
 	}
 }

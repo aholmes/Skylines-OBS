@@ -7,6 +7,8 @@ using System;
 using CitiesStats.Config;
 //using SkyTools.Localization;
 using ColossalFramework.Plugins;
+using System.Collections.Generic;
+using SkyTools.Storage;
 
 namespace CitiesStats
 {
@@ -29,23 +31,14 @@ namespace CitiesStats
 		}
 
 		private const ulong _workshopId = 0;
-		private readonly string _modPath = GetModPath();
 
 		private IConfigurationProvider<CitiesStatsConfig> _configProvider;
 		//private LocalizationProvider _localizationProvider;
 		private ConfigUI _configUI;
 
-		private static string GetModPath()
-		{
-			PluginManager.PluginInfo pluginInfo = PluginManager.instance.GetPluginsInfo()
-				.FirstOrDefault(pi => pi.publishedFileID.AsUInt64 == _workshopId);
-
-			return pluginInfo == null ? string.Empty : pluginInfo.modPath;
-		}
-
 		public void OnEnabled()
 		{
-			_configProvider = new ConfigurationProvider<CitiesStatsConfig>(CitiesStatsConfig.StorageId, Name, () => new CitiesStatsConfig(true));
+			_configProvider = ConfigurationProvider<CitiesStatsConfig>.Create(CitiesStatsConfig.StorageId, Name, () => new CitiesStatsConfig(true));
 			_configProvider.LoadDefaultConfiguration();
 			//_localizationProvider = new LocalizationProvider(Name, _modPath);
 		}
@@ -64,10 +57,20 @@ namespace CitiesStats
 			_configUI = ConfigUI.Create(_configProvider, helper);
 		}
 
+		private static void LoadStorageData(IEnumerable<IStorageData> storageData, StorageBase storage)
+		{
+			foreach (var item in storageData)
+			{
+				storage.Deserialize(item);
+			}
+		}
+
 		private void CloseConfigUI()
 		{
 			if (_configUI != null)
 			{
+				_configProvider.SaveDefaultConfiguration();
+
 				_configUI.Dispose();
 				_configUI = null;
 			}
