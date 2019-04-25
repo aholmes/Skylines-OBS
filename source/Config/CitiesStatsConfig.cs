@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using SkyTools.Configuration;
+﻿using SkyTools.Configuration;
+using SkyTools.Tools;
 using SkyTools.UI;
-using UnityEngine;
 
 namespace CitiesStats.Config
 {
@@ -33,7 +28,7 @@ namespace CitiesStats.Config
 		{
 			if (Version == 0)
 			{
-				UserCultureName = System.Globalization.CultureInfo.CurrentCulture.Name;
+				ResetToDefaults();
 			}
 
 			Version = LatestVersion;
@@ -43,22 +38,23 @@ namespace CitiesStats.Config
 		{
 			try
 			{
-				CultureInfo.CreateSpecificCulture(UserCultureName);
+				System.IO.Directory.Exists(DataFileDirectory);
+				System.IO.Directory.GetAccessControl(DataFileDirectory);
 			}
 			catch
 			{
-				Debug.Log("Culture with name '"+UserCultureName+"' could not be found.");
+				Log.Error("Directory '"+DataFileDirectory+"' does not exists, or is not accessible.");
 			}
 		}
 
 		public int Version { get; set; }
 
-		[ConfigItem("UserCultureName", 0)]
-		public string UserCultureName { get; set; }
+		[ConfigItem("DataFileDirectory", 0)]
+		public string DataFileDirectory { get; set; }
 
 		public void ResetToDefaults()
 		{
-
+			DataFileDirectory = "CitiesStats";
 		}
 	}
 }

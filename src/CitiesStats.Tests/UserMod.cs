@@ -4,18 +4,11 @@ using AutoFixture.AutoMoq;
 using AutoFixture.Xunit2;
 using ICities;
 using Moq;
+using Test.Utils;
 using Xunit;
 
 namespace CitiesStats.Tests
 {
-	public class AutoMoqDataAttribute : AutoDataAttribute
-	{
-		public AutoMoqDataAttribute()
-			: base(() => new Fixture().Customize(new AutoMoqCustomization()))
-		{
-		}
-	}
-
 	public class UserMod
 	{
 		private CitiesStats _modInstance;
@@ -25,10 +18,16 @@ namespace CitiesStats.Tests
 			_modInstance = new CitiesStats();
 		}
 
-		[Theory, AutoMoqData]
-		public void OnSettingsUI_Does_Not_Crash(Mock<UIHelperBase> uiHelperBaseMock)
+		[Fact]
+		public void OnEnabled_Does_Not_Crash()
 		{
-			_modInstance.OnSettingsUI(uiHelperBaseMock.Object);
+			_modInstance.OnEnabled();
+		}
+
+		[Theory, AutoMoqData]
+		public void OnSettingsUI_Does_Not_Crash(Mock<UIHelperBase> mockUiHelperBase)
+		{
+			_modInstance.OnSettingsUI(mockUiHelperBase.Object);
 		}
 	}
 }

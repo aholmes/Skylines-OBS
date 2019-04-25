@@ -1,19 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
 using ICities;
-using SkyTools.Configuration;
-using UnityEngine;
+using SkyTools.Tools;
 
 namespace CitiesStats.Config
 {
-	internal sealed class ConfigUI: IDisposable
+	public sealed class ConfigUI: IDisposable
 	{
-		private readonly ConfigurationProvider<Config.CitiesStatsConfig> configProvider;
-
-		public static ConfigUI Create(ConfigurationProvider<Config.CitiesStatsConfig> configProvider, UIHelperBase helper)
+		public static ConfigUI Create(IConfigurationProvider<CitiesStatsConfig> configProvider, UIHelperBase helper)
 		{
 			if (configProvider == null) throw new ArgumentNullException("configProvider");
 			if (helper == null) throw new ArgumentNullException("helper");
@@ -28,28 +21,15 @@ namespace CitiesStats.Config
 			return new ConfigUI(configProvider);
 		}
 
-		private static void CreateViewItems(ConfigurationProvider<Config.CitiesStatsConfig> configProvider, UIHelperBase helper)
+		private static void CreateViewItems(IConfigurationProvider<CitiesStatsConfig> configProvider, UIHelperBase helper)
 		{
-			var cultures = CultureInfo.GetCultures(CultureTypes.SpecificCultures);
-			var currentCulture = new[] { CultureInfo.CurrentCulture };
-			var orderedCultures = currentCulture.Concat(cultures.Except(currentCulture)).ToArray();
-			var cultureDisplayNames = new string[orderedCultures.Length];
-			for(var i = 0; i < orderedCultures.Length; i++)
-			{
-				var culture = orderedCultures[i];
-				cultureDisplayNames[i] = culture.Name + " - " + culture.NativeName + " / " + culture.EnglishName;
-			}
-
-			var userSettings = helper.AddGroup("User Settings");
-			userSettings.AddDropdown("Culture / Language", cultureDisplayNames, 0, index => Debug.Log(index));
-
 			var modSettings = helper.AddGroup("Mod Settings");
-			modSettings.AddTextfield("File Directory", @"C:\", changedText => Debug.Log(changedText), textSubmitted => Debug.Log(textSubmitted));
+			modSettings.AddTextfield("Data File Directory", @"C:\", changedText => Log.Error(changedText), textSubmitted => Log.Error(textSubmitted));
 		}
 
-		private ConfigurationProvider<CitiesStatsConfig> _configProvider;
+		private readonly IConfigurationProvider<CitiesStatsConfig> _configProvider;
 
-		public ConfigUI(ConfigurationProvider<CitiesStatsConfig> configProvider)
+		public ConfigUI(IConfigurationProvider<CitiesStatsConfig> configProvider)
 		{
 			_configProvider = configProvider;
 			_configProvider.Changed += ConfigProviderChanged;
@@ -57,13 +37,13 @@ namespace CitiesStats.Config
 
 		private void ResetToDefaults()
 		{
-			configProvider.Configuration.ResetToDefaults();
+			_configProvider.Configuration.ResetToDefaults();
 			RefreshAllItems();
 		}
 
 		private void UseForNewGames()
 		{
-			configProvider.SaveDefaultConfiguration();
+			_configProvider.SaveDefaultConfiguration();
 		}
 
 		private void ConfigProviderChanged(object sender, EventArgs e)
@@ -89,7 +69,7 @@ namespace CitiesStats.Config
 
 			if (disposing)
 			{
-				configProvider.Changed -= ConfigProviderChanged;
+				_configProvider.Changed -= ConfigProviderChanged;
 			}
 
 			_disposed = true;
