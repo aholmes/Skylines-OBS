@@ -56,7 +56,7 @@ namespace CitiesStats
 
 			if (_configProvider.Configuration == null)
 			{
-				SkyTools.Tools.Log.Warning("'Cities Stats' wants to display the configuration page, but the configuration is unexpectedly missing.");
+				System.Diagnostics.Debug.WriteLine("'Cities Stats' wants to display the configuration page, but the configuration is unexpectedly missing.");
 				_configProvider.LoadDefaultConfiguration();
 			}
 

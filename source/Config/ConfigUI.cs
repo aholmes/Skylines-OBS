@@ -24,7 +24,7 @@ namespace CitiesStats.Config
 		private static void CreateViewItems(IConfigurationProvider<CitiesStatsConfig> configProvider, UIHelperBase helper)
 		{
 			var modSettings = helper.AddGroup("Mod Settings");
-			modSettings.AddTextfield("Data File Directory", @"C:\", changedText => Log.Error(changedText), textSubmitted => Log.Error(textSubmitted));
+			modSettings.AddTextfield("Data File Directory", @"C:\", changedText => System.Diagnostics.Debug.WriteLine(changedText), textSubmitted => System.Diagnostics.Debug.WriteLine(textSubmitted));
 		}
 
 		private readonly IConfigurationProvider<CitiesStatsConfig> _configProvider;

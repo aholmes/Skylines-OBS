@@ -43,7 +43,7 @@ namespace CitiesStats.Config
 			}
 			catch
 			{
-				Log.Error("Directory '"+DataFileDirectory+"' does not exists, or is not accessible.");
+				System.Diagnostics.Debug.WriteLine("Directory '"+DataFileDirectory+"' does not exists, or is not accessible.");
 			}
 		}
 
