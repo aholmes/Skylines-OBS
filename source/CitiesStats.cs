@@ -69,8 +69,6 @@ namespace CitiesStats
 		{
 			if (_configUI != null)
 			{
-				_configProvider.SaveDefaultConfiguration();
-
 				_configUI.Dispose();
 				_configUI = null;
 			}

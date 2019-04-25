@@ -30,12 +30,8 @@ namespace CitiesStats.Config
 				changedText =>
 				{
 					configProvider.Configuration.DataFileDirectory = changedText;
+					configProvider.SaveDefaultConfiguration();
 					System.Diagnostics.Debug.WriteLine(changedText);
-				},
-				textSubmitted =>
-				{
-					configProvider.Configuration.DataFileDirectory = textSubmitted;
-					System.Diagnostics.Debug.WriteLine(textSubmitted);
 				});
 		}
 
@@ -65,7 +61,7 @@ namespace CitiesStats.Config
 
 		private void RefreshAllItems()
 		{
-
+			_configProvider.SaveDefaultConfiguration();
 		}
 
 		private bool _disposed;
